@@ -1,5 +1,6 @@
 package com.wantedpreonboarding.common.config;
 
+import com.wantedpreonboarding.Filter.ExceptionHandlerFilter;
 import com.wantedpreonboarding.Filter.JwtFilter;
 import com.wantedpreonboarding.common.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,10 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
     @Override
     public void configure(HttpSecurity http) throws Exception {
         JwtFilter jwtFilter = new JwtFilter(jwtTokenProvider);
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        ExceptionHandlerFilter exceptionHandlerFilter = new ExceptionHandlerFilter();
+        http
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtFilter.class);
     }
 
 }
