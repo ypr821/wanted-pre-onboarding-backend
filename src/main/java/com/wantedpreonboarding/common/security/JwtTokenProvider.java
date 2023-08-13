@@ -1,7 +1,7 @@
 package com.wantedpreonboarding.common.security;
 
-import static com.wantedpreonboarding.common.Utils.MessageConstants.EXPIRED_JWT;
-import static com.wantedpreonboarding.common.Utils.MessageConstants.INVALID_JWT;
+import static com.wantedpreonboarding.common.utils.MessageConstants.EXPIRED_JWT;
+import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_JWT;
 
 import com.wantedpreonboarding.common.exception.BaseException;
 import com.wantedpreonboarding.service.UserDetailsService;

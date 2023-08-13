@@ -1,4 +1,4 @@
-package com.wantedpreonboarding.dto.Response;
+package com.wantedpreonboarding.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;

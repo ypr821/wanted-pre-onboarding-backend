@@ -1,6 +1,6 @@
 package com.wantedpreonboarding.common.exception;
 
-import com.wantedpreonboarding.dto.Response.BasicResponse;
+import com.wantedpreonboarding.dto.response.BasicResponse;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +25,18 @@ public class ExceptionHandlerAdvice {
                 .message(e.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<BasicResponse> badRequestExceptionHandler(ForbiddenException e) {
+        e.printStackTrace();
+        BasicResponse response = BasicResponse.builder()
+                .dateTime(LocalDateTime.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .message(e.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
 

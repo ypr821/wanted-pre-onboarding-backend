@@ -1,7 +1,7 @@
 package com.wantedpreonboarding.common.config;
 
-import com.wantedpreonboarding.Filter.ExceptionHandlerFilter;
-import com.wantedpreonboarding.Filter.JwtFilter;
+import com.wantedpreonboarding.filter.ExceptionHandlerFilter;
+import com.wantedpreonboarding.filter.JwtFilter;
 import com.wantedpreonboarding.common.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;

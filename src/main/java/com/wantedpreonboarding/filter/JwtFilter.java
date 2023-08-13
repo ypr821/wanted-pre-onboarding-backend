@@ -1,6 +1,6 @@
-package com.wantedpreonboarding.Filter;
+package com.wantedpreonboarding.filter;
 
-import static com.wantedpreonboarding.common.Utils.MessageConstants.INVALID_JWT;
+import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_JWT;
 
 import com.wantedpreonboarding.common.exception.BaseException;
 import com.wantedpreonboarding.common.security.JwtTokenProvider;

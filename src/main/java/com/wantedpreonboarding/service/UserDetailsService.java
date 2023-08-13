@@ -1,6 +1,6 @@
 package com.wantedpreonboarding.service;
 
-import static com.wantedpreonboarding.common.Utils.MessageConstants.INVALID_USER_ID;
+import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_USER_ID;
 
 import com.wantedpreonboarding.common.exception.BaseException;
 import com.wantedpreonboarding.entity.UserEntity;
