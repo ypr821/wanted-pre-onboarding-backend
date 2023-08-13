@@ -1,6 +1,8 @@
 package com.wantedpreonboarding.controller;
 
+import com.wantedpreonboarding.dto.request.UserLoginPostRequest;
 import com.wantedpreonboarding.dto.request.UserPostRequest;
+import com.wantedpreonboarding.dto.response.UserLoginPostResponse;
 import com.wantedpreonboarding.dto.response.UserPostResponse;
 import com.wantedpreonboarding.service.UserService;
 import io.swagger.annotations.Api;
@@ -30,5 +32,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.joinUser(dto));
     }
 
-
+    @ApiOperation(value = "로그인")
+    @PostMapping(value = "/api/users/login")
+    public ResponseEntity<UserLoginPostResponse> loginUser(HttpServletRequest request,
+            @Valid @RequestBody UserLoginPostRequest dto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.loginUser(dto));
+    }
 }
