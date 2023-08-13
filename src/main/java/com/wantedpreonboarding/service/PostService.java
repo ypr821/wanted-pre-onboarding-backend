@@ -1,14 +1,17 @@
 package com.wantedpreonboarding.service;
 
+import static com.wantedpreonboarding.common.utils.MessageConstants.COMPLETION_POST_DELETE;
 import static com.wantedpreonboarding.common.utils.MessageConstants.COMPLETION_POST_SAVED;
 import static com.wantedpreonboarding.common.utils.MessageConstants.COMPLETION_POST_UPDATE;
 import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_POST_ID;
+import static com.wantedpreonboarding.common.utils.MessageConstants.NO_DELETE_PERMISSION_POST;
 import static com.wantedpreonboarding.common.utils.MessageConstants.NO_UPDATE_PERMISSION_POST;
 
 import com.wantedpreonboarding.common.exception.BadRequestException;
 import com.wantedpreonboarding.common.exception.ForbiddenException;
 import com.wantedpreonboarding.dto.request.PostPatchRequest;
 import com.wantedpreonboarding.dto.request.PostPostRequest;
+import com.wantedpreonboarding.dto.response.BasicResponse;
 import com.wantedpreonboarding.dto.response.PostGetResponse;
 import com.wantedpreonboarding.dto.response.PostListGetResponse;
 import com.wantedpreonboarding.dto.response.PostPatchResponse;
@@ -97,6 +100,23 @@ public class PostService {
                 .createDt(post.getCreateDt())
                 .updateDt(post.getUpdateDt())
                 .message(COMPLETION_POST_UPDATE)
+                .build();
+    }
+
+    public BasicResponse deletePost(Long postId, Long userId) {
+        Optional<PostEntity> optionalPost = postRepository.findById(postId);
+        PostEntity post = optionalPost.orElseThrow(() -> new BadRequestException(INVALID_POST_ID));
+        if (post.getUser().getUserId() != userId) {
+            throw new ForbiddenException(NO_DELETE_PERMISSION_POST);
+        }
+        // soft delete
+        post.setDeleteDt(LocalDateTime.now());
+        postRepository.save(post);
+
+        return BasicResponse.builder()
+                .dateTime(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message(COMPLETION_POST_DELETE)
                 .build();
     }
 }

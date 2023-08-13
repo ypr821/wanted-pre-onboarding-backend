@@ -2,6 +2,7 @@ package com.wantedpreonboarding.controller;
 
 import com.wantedpreonboarding.dto.request.PostPatchRequest;
 import com.wantedpreonboarding.dto.request.PostPostRequest;
+import com.wantedpreonboarding.dto.response.BasicResponse;
 import com.wantedpreonboarding.dto.response.PostGetResponse;
 import com.wantedpreonboarding.dto.response.PostListGetResponse;
 import com.wantedpreonboarding.dto.response.PostPatchResponse;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,5 +68,13 @@ public class PostController {
             @AuthenticationPrincipal User user) {
         Long userId = Long.valueOf(user.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(postService.updatePost(postId, dto, userId));
+    }
+
+    @ApiOperation(value = "게시글 삭제")
+    @DeleteMapping(value = "/api/posts/{id}")
+    public ResponseEntity<BasicResponse> deletePost(HttpServletRequest request,
+            @PathVariable(value = "id") Long postId, @AuthenticationPrincipal User user) {
+        Long userId = Long.valueOf(user.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(postService.deletePost(postId, userId));
     }
 }
