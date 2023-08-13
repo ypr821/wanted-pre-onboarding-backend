@@ -1,6 +1,7 @@
 package com.wantedpreonboarding.controller;
 
 import com.wantedpreonboarding.dto.request.PostPostRequest;
+import com.wantedpreonboarding.dto.response.PostGetResponse;
 import com.wantedpreonboarding.dto.response.PostListGetResponse;
 import com.wantedpreonboarding.dto.response.PostPostResponse;
 import com.wantedpreonboarding.service.PostService;
@@ -19,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,5 +47,12 @@ public class PostController {
     public ResponseEntity<Page<PostListGetResponse>> getPostList(HttpServletRequest request,
             @PageableDefault Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getPostList(pageable));
+    }
+
+    @ApiOperation(value = "게시글 상세 조회")
+    @GetMapping(value = "/api/posts/{id}")
+    public ResponseEntity<PostGetResponse> getPost(HttpServletRequest request,
+            @PathVariable(value = "id") Long postId) {
+        return ResponseEntity.status(HttpStatus.OK).body(postService.getPost(postId));
     }
 }

@@ -1,9 +1,11 @@
 package com.wantedpreonboarding.service;
 
 import static com.wantedpreonboarding.common.utils.MessageConstants.COMPLETION_POST_SAVED;
+import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_POST_ID;
 
 import com.wantedpreonboarding.common.exception.BadRequestException;
 import com.wantedpreonboarding.dto.request.PostPostRequest;
+import com.wantedpreonboarding.dto.response.PostGetResponse;
 import com.wantedpreonboarding.dto.response.PostListGetResponse;
 import com.wantedpreonboarding.dto.response.PostPostResponse;
 import com.wantedpreonboarding.entity.PostEntity;
@@ -11,6 +13,7 @@ import com.wantedpreonboarding.repository.PostRepository;
 import com.wantedpreonboarding.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -51,5 +54,19 @@ public class PostService {
                 .userId(entity.getUser().getUserId())
                 .email(entity.getUser().getEmail())
                 .build());
+    }
+
+    public PostGetResponse getPost(Long postId) {
+        Optional<PostEntity> optionalPost = postRepository.findById(postId);
+        PostEntity post = optionalPost.orElseThrow(() -> new BadRequestException(INVALID_POST_ID));
+        return PostGetResponse.builder()
+                .postId(post.getPostId())
+                .userId(post.getUser().getUserId())
+                .email(post.getUser().getEmail())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .createDt(post.getCreateDt())
+                .updateDt(post.getUpdateDt())
+                .build();
     }
 }
