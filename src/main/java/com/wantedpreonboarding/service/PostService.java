@@ -4,6 +4,7 @@ import static com.wantedpreonboarding.common.utils.MessageConstants.COMPLETION_P
 
 import com.wantedpreonboarding.common.exception.BadRequestException;
 import com.wantedpreonboarding.dto.request.PostPostRequest;
+import com.wantedpreonboarding.dto.response.PostListGetResponse;
 import com.wantedpreonboarding.dto.response.PostPostResponse;
 import com.wantedpreonboarding.entity.PostEntity;
 import com.wantedpreonboarding.repository.PostRepository;
@@ -12,6 +13,8 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -39,4 +42,14 @@ public class PostService {
                 .build();
     }
 
+    public Page<PostListGetResponse> getPostList(Pageable pageable) {
+        Page<PostEntity> postEntities = postRepository.findByDeleteDtNullOrderByCreateDtDesc(pageable);
+        return postEntities.map(entity -> PostListGetResponse.builder()
+                .postId(entity.getPostId())
+                .title(entity.getTitle())
+                .createDt(entity.getCreateDt())
+                .userId(entity.getUser().getUserId())
+                .email(entity.getUser().getEmail())
+                .build());
+    }
 }
