@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandlerAdvice {
 
     @ExceptionHandler
-    public ResponseEntity<BasicResponse> badRequestExceptionHandler(BadRequestException e) {
+    public ResponseEntity<BasicResponse> badRequestException(BadRequestException e) {
         e.printStackTrace();
         BasicResponse response = BasicResponse.builder()
                 .dateTime(LocalDateTime.now())
@@ -29,7 +29,7 @@ public class ExceptionHandlerAdvice {
     }
 
     @ExceptionHandler
-    public ResponseEntity<BasicResponse> badRequestExceptionHandler(ForbiddenException e) {
+    public ResponseEntity<BasicResponse> forbiddenException(ForbiddenException e) {
         e.printStackTrace();
         BasicResponse response = BasicResponse.builder()
                 .dateTime(LocalDateTime.now())

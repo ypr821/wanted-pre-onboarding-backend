@@ -1,12 +1,17 @@
 package com.wantedpreonboarding.service;
 
 import static com.wantedpreonboarding.common.utils.MessageConstants.COMPLETION_POST_SAVED;
+import static com.wantedpreonboarding.common.utils.MessageConstants.COMPLETION_POST_UPDATE;
 import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_POST_ID;
+import static com.wantedpreonboarding.common.utils.MessageConstants.NO_UPDATE_PERMISSION_POST;
 
 import com.wantedpreonboarding.common.exception.BadRequestException;
+import com.wantedpreonboarding.common.exception.ForbiddenException;
+import com.wantedpreonboarding.dto.request.PostPatchRequest;
 import com.wantedpreonboarding.dto.request.PostPostRequest;
 import com.wantedpreonboarding.dto.response.PostGetResponse;
 import com.wantedpreonboarding.dto.response.PostListGetResponse;
+import com.wantedpreonboarding.dto.response.PostPatchResponse;
 import com.wantedpreonboarding.dto.response.PostPostResponse;
 import com.wantedpreonboarding.entity.PostEntity;
 import com.wantedpreonboarding.repository.PostRepository;
@@ -67,6 +72,31 @@ public class PostService {
                 .content(post.getContent())
                 .createDt(post.getCreateDt())
                 .updateDt(post.getUpdateDt())
+                .build();
+    }
+
+    public PostPatchResponse updatePost(Long postId, PostPatchRequest dto, Long userId) {
+        Optional<PostEntity> optionalPost = postRepository.findById(postId);
+        PostEntity post = optionalPost.orElseThrow(() -> new BadRequestException(INVALID_POST_ID));
+        if (post.getUser().getUserId() != userId) {
+            throw new ForbiddenException(NO_UPDATE_PERMISSION_POST);
+        }
+        if (dto.getContent() != null) {
+            post.setContent(dto.getContent());
+        }
+        if (dto.getTitle() != null) {
+            post.setTitle(dto.getTitle());
+        }
+        postRepository.save(post);
+        return PostPatchResponse.builder()
+                .postId(post.getPostId())
+                .userId(post.getUser().getUserId())
+                .email(post.getUser().getEmail())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .createDt(post.getCreateDt())
+                .updateDt(post.getUpdateDt())
+                .message(COMPLETION_POST_UPDATE)
                 .build();
     }
 }
