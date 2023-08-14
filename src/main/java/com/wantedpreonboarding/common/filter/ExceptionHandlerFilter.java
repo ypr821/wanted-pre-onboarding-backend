@@ -1,7 +1,7 @@
-package com.wantedpreonboarding.filter;
+package com.wantedpreonboarding.common.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wantedpreonboarding.common.exception.UsernameFromTokenException;
+import com.wantedpreonboarding.common.exception.JwtTokenException;
 import com.wantedpreonboarding.dto.response.ExceptionResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,9 +25,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (UsernameFromTokenException ex) {
-            log.error("exception exception handler filter");
-            setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, ex);
+        } catch (JwtTokenException ex) {
+            log.error("JwtTokenException exception handler filter");
+            setErrorResponse(HttpStatus.UNAUTHORIZED, response, ex);
         } catch (RuntimeException ex) {
             log.error("runtime exception exception handler filter");
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, ex);
@@ -40,10 +40,11 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .dateTime(LocalDateTime.now())
                 .message(ex.getMessage())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .status(status.value())
                 .build();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.findAndRegisterModules();
             String json = objectMapper.writeValueAsString(exceptionResponse);
             log.info(json);
             response.getWriter().write(json);

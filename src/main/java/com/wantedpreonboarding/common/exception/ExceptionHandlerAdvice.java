@@ -1,6 +1,7 @@
 package com.wantedpreonboarding.common.exception;
 
 import com.wantedpreonboarding.dto.response.BasicResponse;
+import com.wantedpreonboarding.dto.response.ExceptionResponse;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,8 @@ public class ExceptionHandlerAdvice {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<BasicResponse> methodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ResponseEntity<BasicResponse> methodArgumentNotValidException(
+            MethodArgumentNotValidException e) {
         e.printStackTrace();
         FieldError fieldError = e.getBindingResult().getFieldError();
         BasicResponse response = BasicResponse.builder()
@@ -74,6 +76,17 @@ public class ExceptionHandlerAdvice {
                 .message(e.getMessage())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JwtTokenException.class)
+    protected ResponseEntity<ExceptionResponse> baseException(JwtTokenException e) {
+        e.printStackTrace();
+        ExceptionResponse response = ExceptionResponse.builder()
+                .dateTime(LocalDateTime.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message(e.getMessage())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)

@@ -3,7 +3,7 @@ package com.wantedpreonboarding.common.security;
 import static com.wantedpreonboarding.common.utils.MessageConstants.EXPIRED_JWT;
 import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_JWT;
 
-import com.wantedpreonboarding.common.exception.BaseException;
+import com.wantedpreonboarding.common.exception.JwtTokenException;
 import com.wantedpreonboarding.service.UserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -69,10 +69,10 @@ public class JwtTokenProvider {
             return true;
         } catch (ExpiredJwtException e) {
             log.error(EXPIRED_JWT);
-            throw new BaseException(EXPIRED_JWT);
+            throw new JwtTokenException(EXPIRED_JWT);
         } catch (JwtException e) {
             log.error(INVALID_JWT);
-            throw new BaseException(INVALID_JWT);
+            throw new JwtTokenException(INVALID_JWT);
         }
     }
 

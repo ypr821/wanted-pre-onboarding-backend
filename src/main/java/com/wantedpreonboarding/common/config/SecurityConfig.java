@@ -49,10 +49,15 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/login", "/api/users", HttpMethod.POST.name()).permitAll()
+                        .requestMatchers("/api/users/login", "/api/users", HttpMethod.POST.name(),
+                                "/v3/api-docs",
+                                "/swagger*/**",
+                                "/v2/api-docs",
+                                "/webjars/**",
+                                "/swagger-resources/**",
+                                "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 );
-
         http
                 // exception handling for jwt
                 .exceptionHandling()

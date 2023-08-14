@@ -1,8 +1,8 @@
-package com.wantedpreonboarding.filter;
+package com.wantedpreonboarding.common.filter;
 
 import static com.wantedpreonboarding.common.utils.MessageConstants.INVALID_JWT;
 
-import com.wantedpreonboarding.common.exception.BaseException;
+import com.wantedpreonboarding.common.exception.JwtTokenException;
 import com.wantedpreonboarding.common.security.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,8 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * 헤더(Authorization)에 있는 토큰을 꺼내 이상이 없는 경우
- * SecurityContext에 저장
+ * 헤더(Authorization)에 있는 토큰을 꺼내 이상이 없는 경우 SecurityContext 에 저장
  *
  * Request 이전에 작동
  */
@@ -43,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            throw new BaseException(INVALID_JWT);
+            throw new JwtTokenException(INVALID_JWT);
         }
 
         filterChain.doFilter(request, response);

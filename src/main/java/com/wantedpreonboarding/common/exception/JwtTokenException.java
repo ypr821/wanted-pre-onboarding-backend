@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class UsernameFromTokenException extends RuntimeException{
+public class JwtTokenException extends RuntimeException {
+
     private final String message;
+
 }
