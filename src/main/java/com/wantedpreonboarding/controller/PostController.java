@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class PostController {
     @ApiOperation(value = "게시글 목록 조회")
     @GetMapping(value = "/api/posts")
     public ResponseEntity<Page<PostListGetResponse>> getPostList(HttpServletRequest request,
-            @PageableDefault Pageable pageable) {
+            @PageableDefault(sort = "postId", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.getPostList(pageable));
     }
 

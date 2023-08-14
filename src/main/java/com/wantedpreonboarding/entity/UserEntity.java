@@ -40,9 +40,6 @@ public class UserEntity implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "token")
-    private String token;
-
     @CreatedDate
     @Column(name = "create_dt")
     private LocalDateTime createDt;

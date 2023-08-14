@@ -56,10 +56,7 @@ public class UserService {
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new BadRequestException(INVALID_EMAIL_PW);
         }
-
         String accessToken = jwtTokenProvider.createToken(user.getUserId(), dto.getEmail());
-        user.setToken(accessToken);
-        userRepository.save(user);
 
         return UserLoginPostResponse.builder()
                 .userId(user.getUserId())
