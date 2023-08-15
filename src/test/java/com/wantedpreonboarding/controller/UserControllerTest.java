@@ -125,7 +125,7 @@ class UserControllerTest {
     void joinUserWithoutEmailFailTest() throws Exception {
         // given
         UserPostRequest requestDto = UserPostRequest.builder()
-                .password("test")
+                .password("test1234")
                 .build();
         String json = objectMapper.writeValueAsString(requestDto);
         // when
