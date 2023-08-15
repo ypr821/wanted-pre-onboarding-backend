@@ -1,22 +1,19 @@
 --
 -- docker 접속 root user 생성
 --
-
 CREATE
 USER 'root'@'%' identified BY '54321';
-
-SELECT host, user FROM user;
 
 GRANT ALL ON *.*TO'root'@'%';
 FLUSH PRIVILEGES;
 
+--
 CREATE
 DATABASE
     IF NOT EXISTS `wanted_assignment`
     DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-USE
-`wanted_assignment`;
+USE wanted_assignment;
 
 
 --
