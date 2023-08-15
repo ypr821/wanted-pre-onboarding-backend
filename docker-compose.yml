@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  wanted_db:
+    container_name: wanted_db
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    image: mysql:8.0.34
+    restart: always
+    volumes:
+      - ./mysql-init-files/:/docker-entrypoint-initdb.d
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_HOST='%'
+      - MYSQL_DATABASE=wanted_assignment
+    ports:
+      - "3306:3306"
+    networks:
+      - wanted_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  wanted_server:
+    container_name: wanted_server
+    ports:
+      - "8080:8080"
+    image: ypr821/wanted-pre-onboarding-backend
+    volumes:
+      - wanted_images:/app/wanted/images
+    networks:
+      - wanted_network
+    depends_on:
+      wanted_db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://wanted_db:3306/wanted_assignment?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+networks:
+  wanted_network:
+    driver: bridge
+volumes:
+  mysql_volume:
+    driver: local
+  wanted_images:
+    driver: local
