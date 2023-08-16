@@ -45,7 +45,7 @@ public class PostController {
     public ResponseEntity<PostPostResponse> createPost(HttpServletRequest request,
             @Valid @RequestBody PostPostRequest dto, @AuthenticationPrincipal User user) {
         Long userId = Long.valueOf(user.getUsername());
-        return ResponseEntity.status(HttpStatus.OK).body(postService.createPost(dto, userId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(dto, userId));
     }
 
     @ApiOperation(value = "게시글 목록 조회")

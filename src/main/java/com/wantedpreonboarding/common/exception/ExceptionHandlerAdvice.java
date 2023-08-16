@@ -79,7 +79,7 @@ public class ExceptionHandlerAdvice {
     }
 
     @ExceptionHandler(JwtTokenException.class)
-    protected ResponseEntity<ExceptionResponse> baseException(JwtTokenException e) {
+    protected ResponseEntity<ExceptionResponse> jwtTokenException(JwtTokenException e) {
         e.printStackTrace();
         ExceptionResponse response = ExceptionResponse.builder()
                 .dateTime(LocalDateTime.now())

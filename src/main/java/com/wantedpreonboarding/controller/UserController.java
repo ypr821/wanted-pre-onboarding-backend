@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping(value = "api/users")
     public ResponseEntity<UserPostResponse> joinUser(HttpServletRequest request,
             @Valid @RequestBody UserPostRequest dto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.joinUser(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.joinUser(dto));
     }
 
     @ApiOperation(value = "로그인")

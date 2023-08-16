@@ -49,7 +49,7 @@ public class PostService {
                 .postId(postEntity.getPostId())
                 .message(COMPLETION_POST_SAVED)
                 .dateTime(LocalDateTime.now())
-                .status(HttpStatus.OK.value())
+                .status(HttpStatus.CREATED.value())
                 .build();
     }
 
