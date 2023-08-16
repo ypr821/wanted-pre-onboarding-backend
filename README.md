@@ -74,3 +74,255 @@ Acess Token을 생성 및 검증하고 토큰으로부터 사용자 정보 추�
 
 ## 6. API 명세(request/response 포함)
 <br>
+
+## 1. 회원가입
+### 1.1 Request
+- POST `/api/users`
+  ```json
+    {
+      "email" : "test@gamil.com",
+      "password" : "12345678"
+    }
+  ```
+### 1.2 Response
+- 201 Created
+  ```json 
+    {
+      "userId": 2,
+      "message": "회원가입 완료"
+    }
+  ```
+- 400 Bad Request (이메일 검증)
+    ```json
+     {
+         "dateTime": "2023-08-16 20:51:05.837",
+         "status": 400,
+         "message": "이미 사용중인 email 입니다."
+     } 
+  ```
+- 400 Bad Request (비밀번호 검증)
+    ```json
+      {
+          "dateTime": "2023-08-16 20:52:12.630",
+          "status": 400,
+          "message": "비밀번호를 8자이상 입력해주세요."
+      }
+    ```
+## 2. 로그인
+### 2.1 Request
+- POST `/api/users/login`
+    ```json
+     {
+         "email": "test@gamil.com",
+         "password":"12345678"
+     }
+    ```
+### 2.2 Response
+- 200 OK
+    ```json
+     {
+         "userId": 1,
+         "message": "로그인 성공",
+         "accessToken": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0b2tlbiIsInVzZXJJZCI6MSwiZW1haWwiOiJ0ZXN0ODIxQGdhbWlsLmNvbSIsImlhdCI6MTY5MjE4Njc0OSwiZXhwIjoxNjkyMjI5OTQ5fQ.LKeqpO-vt6bMcHgmoFvf4x-g7X0H84eGlulbvJ5Mmnk"
+     }
+    ```
+- 400 Bad Request
+    ```json
+      {
+          "dateTime": "2023-08-16 20:53:40.927",
+          "status": 400,
+          "message": "아이디 혹은 비밀번호를 다시 입력해주세요."
+      }
+    ```
+## 3. 게시물 등록
+### 3.1 Request
+- POST `/api/posts`
+- Headers `Authorization: Bearer AccessToken `
+    ```json
+     {
+         "title": "test 제목1",
+         "content":"test 내용 입력1"
+     }
+    ```
+### 3.2 Response
+- 201 Created
+    ```json
+      {
+          "dateTime": "2023-08-16 20:56:29.475",
+          "status": 201,
+          "message": "게시글을 저장하였습니다.",
+          "postId": 4
+      } 
+    ```
+- 401 Unauthorized (유효하지 않는 Access Token)
+    ```json
+      {
+          "dateTime": "2023-08-16 20:57:55.472",
+          "status": 401,
+          "message": "유효하지 않은 토큰입니다."
+      }
+    ```
+    
+## 4. 게시물 목록 조회
+### 4.1 Request
+- GET `/api/posts?page=0&size=5`
+- Headers `Authorization: Bearer AccessToken `
+### 4.2 Response
+- 200 OK
+  ```json
+      {
+          "content": [
+              {
+                  "postId": 3,
+                  "userId": 1,
+                  "email": "test@gamil.com",
+                  "title": "test 제목1",
+                  "createDt": "2023-08-16 18:14:27.000"
+              }
+          ],
+          "pageable": {
+              "sort": {
+                  "empty": false,
+                  "sorted": true,
+                  "unsorted": false
+              },
+              "offset": 0,
+              "pageNumber": 0,
+              "pageSize": 10,
+              "paged": true,
+              "unpaged": false
+          },
+          "last": true,
+          "totalElements": 2,
+          "totalPages": 1,
+          "size": 10,
+          "number": 0,
+          "sort": {
+              "empty": false,
+              "sorted": true,
+              "unsorted": false
+          },
+          "first": true,
+          "numberOfElements": 2,
+          "empty": false
+      }
+  ```
+
+  ## 4. 게시물 상세 조회
+### 4.1 Request
+- GET `/api/posts/{id}`
+- Headers `Authorization: Bearer AccessToken `
+### 4.2 Response
+- 200 Ok
+    ```json
+      {
+          "postId": 1,
+          "userId": 1,
+          "email": "test821@gamil.com",
+          "title": "test 제목1",
+          "content": "test 내용 입력1",
+          "createDt": "2023-08-16 00:58:50.000",
+          "updateDt": "2023-08-16 00:58:50.000"
+      }   
+    ```
+- 400 Bad Request (등록되지 않는 게시물 조회 요청)
+    ```json
+     { 
+      "dateTime": "2023-08-16 21:06:40.232",
+      "status": 400,
+      "message": "유효하지 않은 게시글 고유 번호입니다."
+     } 
+    ```  
+- 401 Unauthorized (유효하지 않는 Access Token)
+    ```json
+    {
+        "dateTime": "2023-08-16 21:07:00.310",
+        "status": 401,
+        "message": "유효하지 않은 토큰입니다."
+    }
+    ```
+## 5. 게시물 수정
+### 5.1 Request
+- PATCH `/api/posts/{id}`
+- Headers `Authorization: Bearer AccessToken `
+  ```json
+     {
+         "title": "test 제목 2 - 수정",
+         "content":"test 내용 입력2 - 수정"
+     }
+
+### 5.2 Response
+- 200 OK
+  ```json
+     {
+         "postId": 2,
+         "userId": 1,
+         "email": "test821@gamil.com",
+         "title": "test 제목 2 - 수정",
+         "content": "test 내용 입력2 - 수정",
+         "createDt": "2023-08-16 16:08:28.000",
+         "updateDt": "2023-08-16 18:14:43.000",
+         "message": "게시글을 수정하였습니다."
+     }
+  ```
+- 400 Bad Request (등록되지 않는 게시물 조회 요청)
+    ```json
+    {
+      "dateTime": "2023-08-16 21:10:23.592",
+      "status": 400,
+      "message": "유효하지 않은 게시글 고유 번호입니다."
+    }
+    ```  
+- 401 Unauthorized (유효하지 않는 Access Token)
+    ```json
+    {
+      "dateTime": "2023-08-16 21:10:47.563",
+      "status": 401,
+      "message": "유효하지 않은 토큰입니다."
+    }
+    ```
+- 403 Forbidden (작성자와 로그인한 사용자가 다른 경우)
+  ```json
+    {
+      "dateTime": "2023-08-16 21:12:04.586",
+      "status": 403,
+      "message": "게시글을 수정할 수 있는 권한이 없습니다."
+    }
+  ```
+## 6. 게시물 삭제
+### 6.1 Request
+- DELETE `/api/posts/{id}`
+- Headers `Authorization: Bearer AccessToken `
+### 6.2 Response
+- 200 OK
+  ```json
+    {
+      "dateTime": "2023-08-16 21:15:27.641",
+      "status": 200,
+      "message": "게시글을 삭제하였습니다."
+    }
+  ```
+- 400 Bad Request (등록되지 않는 게시물 조회 요청)
+    ```json
+    {
+      "dateTime": "2023-08-16 21:13:48.407",
+      "status": 400,
+      "message": "유효하지 않은 게시글 고유 번호입니다."
+    }
+    ```  
+- 401 Unauthorized (유효하지 않는 Access Token)
+    ```json
+    {
+      "dateTime": "2023-08-16 21:10:47.563",
+      "status": 401,
+      "message": "유효하지 않은 토큰입니다."
+    }
+    ```
+- 403 Forbidden (작성자와 로그인한 사용자가 다른 경우)
+  ```json
+     {
+       "dateTime": "2023-08-16 21:14:38.809",
+       "status": 403,
+       "message": "게시글을 삭제할 수 있는 권한이 없습니다."
+     }
+  ```
