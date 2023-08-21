@@ -30,7 +30,7 @@ $ docker-compose up --build -d
 | GET | /api/posts/{Id} | 게시물 상세 조회 |
 
 ### [클라우드 환경(AWS)에 배포 환경]
-API 배포 서버 URL : http://54.180.221.197/
+API 배포 서버 URL : (요금 때문에 서버 중지 상태입니다.) http://54.180.221.197/
 <br>
 
 ![스크린샷 2023-08-16 오후 6 55 38](https://github.com/ypr821/wanted-pre-onboarding-backend/assets/56250078/16b6dc5f-3bb3-4f63-8dfb-03c25996181a)
